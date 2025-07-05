@@ -1,25 +1,26 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
 import { useProductStore } from "../Stores/modules/products";
-import { useSearchStore } from "../Stores/modules/search"; // <-- if you migrated it
+import { useSearchStore } from "../Stores/modules/search";
 import ProductCards from "./ProductCards.vue";
 import SortDropdown from "./SortDropdown.vue";
 import type { Product } from "../Stores/types";
 
 // Stores
 const productStore = useProductStore();
-const searchStore = useSearchStore(); // if using Pinia search module
+const searchStore = useSearchStore();
 
 // Local state
 const selectedSort = ref("default");
 
-// Computed properties
-const products = computed(() => productStore.allProducts);
+// Computed
+const products = computed<Product[]>(() => productStore.allProducts || []);
 const loading = computed(() => productStore.isLoading);
-const searchQuery = computed(() => searchStore.searchQuery.toLowerCase());
+const searchQuery = computed(() => searchStore.searchQuery.toLowerCase() || "");
 
-const filteredProducts = computed(() => {
-  let filtered = products.value.filter((product: Product) =>
+// Filtering + Sorting
+const filteredProducts = computed<Product[]>(() => {
+  let filtered = products.value.filter((product) =>
     product.title.toLowerCase().includes(searchQuery.value)
   );
 
@@ -37,7 +38,6 @@ onMounted(() => {
   productStore.fetchProducts();
 });
 </script>
-
 <template>
   <div class="productsList">
     <div v-if="loading" class="loading">Loading products...</div>

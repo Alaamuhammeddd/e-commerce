@@ -1,39 +1,36 @@
-import { shallowMount } from "@vue/test-utils";
-import MobileMenu from "@/components/MobileMenu.vue"; // Adjust the path if needed
+import { describe, it, expect } from "vitest";
+import { mount } from "@vue/test-utils";
+import MobileMenu from "@/components/MobileMenu.vue";
 
 describe("MobileMenu.vue", () => {
-  it("renders with correct class when isOpen is true", () => {
-    const wrapper = shallowMount(MobileMenu, {
+  it("adds open class when isOpen is true", () => {
+    const wrapper = mount(MobileMenu, {
       props: {
         isOpen: true,
       },
     });
 
-    const menu = wrapper.find(".mobile-menu");
-    expect(menu.classes()).toContain("mobile-menu__hamburger--open");
+    expect(wrapper.classes()).toContain("mobile-menu__hamburger--open");
   });
 
-  it("does not have open class when isOpen is false", () => {
-    const wrapper = shallowMount(MobileMenu, {
+  it("does not add open class when isOpen is false", () => {
+    const wrapper = mount(MobileMenu, {
       props: {
         isOpen: false,
       },
     });
 
-    const menu = wrapper.find(".mobile-menu");
-    expect(menu.classes()).not.toContain("mobile-menu__hamburger--open");
+    expect(wrapper.classes()).not.toContain("mobile-menu__hamburger--open");
   });
 
-  it("emits 'close-menu' when hamburger is clicked", async () => {
-    const wrapper = shallowMount(MobileMenu, {
+  it("emits close-menu when hamburger is clicked", async () => {
+    const wrapper = mount(MobileMenu, {
       props: {
         isOpen: true,
       },
     });
 
-    const hamburger = wrapper.find(".mobile-menu__hamburger");
-    await hamburger.trigger("click");
-
+    await wrapper.find(".mobile-menu__hamburger").trigger("click");
     expect(wrapper.emitted("close-menu")).toBeTruthy();
     expect(wrapper.emitted("close-menu").length).toBe(1);
   });

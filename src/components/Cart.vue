@@ -26,7 +26,6 @@
         </div>
       </div>
     </div>
-
     <div class="cart-panel__footer">
       <p>Total: ${{ cartTotalPrice.toFixed(2) }}</p>
       <button class="cart-panel__footer--btn">Checkout</button>
@@ -44,7 +43,8 @@ const emit = defineEmits(["close-cart"]);
 
 const cartStore = useCartStore();
 
-const { cartItems, cartTotalPrice } = storeToRefs(cartStore);
+const { cartItems } = storeToRefs(cartStore);
+const cartTotalPrice = cartStore.cartTotalPrice;
 
 function removeItem(id: number) {
   cartStore.removeFromCart(id);

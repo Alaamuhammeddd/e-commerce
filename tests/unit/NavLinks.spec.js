@@ -1,50 +1,70 @@
-import { shallowMount } from "@vue/test-utils";
+import { describe, it, expect } from "vitest";
+import { mount } from "@vue/test-utils";
 import NavLinks from "@/components/NavLinks.vue";
+import { createTestingPinia } from "@pinia/testing";
+import { createRouter, createWebHistory } from "vue-router";
+
+// Minimal mock routes for <router-link>
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    { path: "/home", name: "Home", component: { template: "<div>Home</div>" } },
+    {
+      path: "/products",
+      name: "Products",
+      component: { template: "<div>Products</div>" },
+    },
+    {
+      path: "/contact-us",
+      name: "Contact",
+      component: { template: "<div>Contact</div>" },
+    },
+  ],
+});
 
 describe("NavLinks.vue", () => {
-  const globalStubs = {
-    "router-link": {
-      template: "<a><slot /></a>",
-    },
-  };
-
-  it("renders all navigation links", () => {
-    const wrapper = shallowMount(NavLinks, {
+  it("renders navigation links", async () => {
+    const wrapper = mount(NavLinks, {
       global: {
-        stubs: globalStubs,
+        plugins: [router, createTestingPinia()],
       },
-    });
-
-    const links = wrapper.findAll("a");
-    expect(links.length).toBe(3);
-    expect(links[0].text()).toBe("Home");
-    expect(links[1].text()).toBe("Products");
-    expect(links[2].text()).toBe("Contact");
-  });
-
-  it("applies 'header__nav--open' class when isOpen is true", () => {
-    const wrapper = shallowMount(NavLinks, {
-      props: {
-        isOpen: true,
-      },
-      global: {
-        stubs: globalStubs,
-      },
-    });
-
-    expect(wrapper.find("ul").classes()).toContain("header__nav--open");
-  });
-
-  it("does not apply 'header__nav--open' class when isOpen is false", () => {
-    const wrapper = shallowMount(NavLinks, {
       props: {
         isOpen: false,
       },
+    });
+
+    // Wait for router to be ready
+    await router.isReady();
+
+    expect(wrapper.findAll(".header__nav-item").length).toBe(3);
+    expect(wrapper.text()).toContain("Home");
+    expect(wrapper.text()).toContain("Products");
+    expect(wrapper.text()).toContain("Contact");
+  });
+
+  it("adds header__nav--open class when isOpen is true", async () => {
+    const wrapper = mount(NavLinks, {
       global: {
-        stubs: globalStubs,
+        plugins: [router],
+      },
+      props: {
+        isOpen: true,
       },
     });
 
-    expect(wrapper.find("ul").classes()).not.toContain("header__nav--open");
+    expect(wrapper.classes()).toContain("header__nav--open");
+  });
+
+  it("does not add header__nav--open class when isOpen is false", async () => {
+    const wrapper = mount(NavLinks, {
+      global: {
+        plugins: [router],
+      },
+      props: {
+        isOpen: false,
+      },
+    });
+
+    expect(wrapper.classes()).not.toContain("header__nav--open");
   });
 });

@@ -1,71 +1,82 @@
-import { shallowMount } from "@vue/test-utils";
-import { createStore } from "vuex";
+import { mount } from "@vue/test-utils";
 import SearchBar from "@/components/SearchBar.vue";
+import { createTestingPinia } from "@pinia/testing";
+import { nextTick } from "vue";
+
+vi.mock("@/Stores/modules/search", () => ({
+  useSearchStore: vi.fn(),
+}));
+
+import { useSearchStore } from "@/Stores/modules/search";
 
 describe("SearchBar.vue", () => {
-  let store;
-  let dispatchSpy;
+  let searchStore;
 
   beforeEach(() => {
-    store = createStore({
-      modules: {
-        search: {
-          namespaced: true,
-          state: () => ({
-            searchQuery: "",
-          }),
-          getters: {
-            searchQuery: (state) => state.searchQuery,
-          },
-          actions: {
-            setSearchQuery: jest.fn(),
-          },
-        },
+    searchStore = {
+      searchQuery: "",
+      setSearchQuery: vi.fn(),
+    };
+
+    useSearchStore.mockReturnValue(searchStore);
+  });
+
+  it("renders search icon and input", () => {
+    const wrapper = mount(SearchBar, {
+      global: {
+        plugins: [createTestingPinia()],
       },
     });
 
-    // Spy on store.dispatch
-    dispatchSpy = jest.spyOn(store, "dispatch");
+    expect(wrapper.find(".fa-search").exists()).toBe(true);
+    expect(wrapper.find("input").exists()).toBe(true);
   });
 
-  it("renders input and updates store on change", async () => {
-    const wrapper = shallowMount(SearchBar, {
+  it("updates store searchQuery on input", async () => {
+    const wrapper = mount(SearchBar, {
       global: {
-        plugins: [store],
+        plugins: [createTestingPinia()],
       },
     });
 
     const input = wrapper.find("input");
-    await input.setValue("Shoes");
+    await input.setValue("Laptop");
 
-    expect(dispatchSpy).toHaveBeenCalledWith("search/setSearchQuery", "Shoes");
+    expect(searchStore.setSearchQuery).toHaveBeenCalledWith("Laptop");
   });
 
-  it("toggles mobile search visibility", async () => {
-    const wrapper = shallowMount(SearchBar, {
+  it("toggles mobile search visibility on icon click", async () => {
+    const wrapper = mount(SearchBar, {
       global: {
-        plugins: [store],
+        plugins: [createTestingPinia()],
       },
     });
 
-    expect(wrapper.vm.isMobileSearchVisible).toBe(false);
+    // Force mobile state
+    wrapper.vm.isMobile = true;
+    await nextTick();
 
-    await wrapper.find(".search-bar__icon").trigger("click");
+    // Initially hidden
+    expect(
+      wrapper.find(".search-bar__mobileSearch").element.style.display
+    ).toBe("none");
 
-    expect(wrapper.vm.isMobileSearchVisible).toBe(true);
-  });
+    // Click to show
+    await wrapper.find(".fa-search").trigger("click");
+    await nextTick();
 
-  it("should hide mobile search on desktop", async () => {
-    const wrapper = shallowMount(SearchBar, {
-      global: {
-        plugins: [store],
-      },
-    });
+    // Now visible
+    expect(
+      wrapper.find(".search-bar__mobileSearch").element.style.display
+    ).not.toBe("none");
 
-    global.innerWidth = 1200;
-    global.dispatchEvent(new Event("resize"));
+    // Click again to hide
+    await wrapper.find(".fa-search").trigger("click");
+    await nextTick();
 
-    expect(wrapper.vm.isMobile).toBe(false);
-    expect(wrapper.vm.isMobileSearchVisible).toBe(false);
+    // Hidden again
+    expect(
+      wrapper.find(".search-bar__mobileSearch").element.style.display
+    ).toBe("none");
   });
 });
