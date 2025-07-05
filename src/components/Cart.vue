@@ -38,12 +38,8 @@
 import { storeToRefs } from "pinia";
 import { useCartStore } from "../Stores/modules/cart";
 
-const props = defineProps({
-  isCartOpen: {
-    type: Boolean,
-    required: false,
-  },
-});
+const { isCartOpen } = defineProps<{ isCartOpen: boolean }>();
+
 const emit = defineEmits(["close-cart"]);
 
 const cartStore = useCartStore();
