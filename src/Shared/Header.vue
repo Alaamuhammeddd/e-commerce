@@ -6,7 +6,7 @@
     <!-- Logo -->
     <div class="header__logo-wrapper">
       <router-link :to="{ name: 'Home' }">
-        <img class="header__logo" :src="logo" alt="logo" />
+        <img class="header__logo" src="@/assets/Luna.png" alt="logo" />
       </router-link>
     </div>
 
@@ -31,7 +31,6 @@ import MobileMenu from "../components/MobileMenu.vue";
 import NavLinks from "../components/NavLinks.vue";
 import Cart from "../components/Cart.vue";
 import SearchBar from "../components/SearchBar.vue";
-import logo from "../assets/Luna.png";
 
 // State
 const isCartOpen = ref(false);
