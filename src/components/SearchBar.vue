@@ -20,45 +20,59 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+<script lang="ts">
+import {
+  defineComponent,
+  ref,
+  computed,
+  onMounted,
+  onBeforeUnmount,
+} from "vue";
 import { useSearchStore } from "../Stores/modules/search";
 
-const isMobileSearchVisible = ref(false);
-const isMobile = ref(false);
+export default defineComponent({
+  name: "SearchBar",
+  setup() {
+    const isMobileSearchVisible = ref(false);
+    const isMobile = ref(false);
 
-// ✅ Use Pinia search store
-const searchStore = useSearchStore();
+    const searchStore = useSearchStore();
 
-// Handle screen resize
-const handleResize = () => {
-  isMobile.value = window.innerWidth <= 1023;
-  if (!isMobile.value) {
-    isMobileSearchVisible.value = false;
-  }
-};
+    const handleResize = () => {
+      isMobile.value = window.innerWidth <= 1023;
+      if (!isMobile.value) {
+        isMobileSearchVisible.value = false;
+      }
+    };
 
-onMounted(() => {
-  handleResize();
-  window.addEventListener("resize", handleResize);
-});
+    onMounted(() => {
+      handleResize();
+      window.addEventListener("resize", handleResize);
+    });
 
-onBeforeUnmount(() => {
-  window.removeEventListener("resize", handleResize);
-});
+    onBeforeUnmount(() => {
+      window.removeEventListener("resize", handleResize);
+    });
 
-// ✅ Computed v-model binding with Pinia
-const searchQuery = computed({
-  get: () => searchStore.searchQuery,
-  set: (value: string) => {
-    searchStore.setSearchQuery(value);
+    const searchQuery = computed({
+      get: () => searchStore.searchQuery,
+      set: (value: string) => {
+        searchStore.setSearchQuery(value);
+      },
+    });
+
+    const toggleMobileSearch = () => {
+      isMobileSearchVisible.value = !isMobileSearchVisible.value;
+    };
+
+    return {
+      isMobileSearchVisible,
+      isMobile,
+      searchQuery,
+      toggleMobileSearch,
+    };
   },
 });
-
-// Toggle search visibility on mobile
-const toggleMobileSearch = () => {
-  isMobileSearchVisible.value = !isMobileSearchVisible.value;
-};
 </script>
 
 <style scoped lang="scss">
@@ -69,7 +83,7 @@ const toggleMobileSearch = () => {
 
   &__icon {
     font-size: 21px;
-    color: #1e077d;
+    color: black;
     cursor: default;
 
     &.clickable {

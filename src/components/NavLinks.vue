@@ -1,16 +1,19 @@
 <template>
   <ul class="header__nav" :class="{ 'header__nav--open': isOpen }">
-    <router-link to="/home" class="header__nav-item header__nav-item--home">
+    <router-link
+      :to="{ name: 'Home' }"
+      class="header__nav-item header__nav-item--home"
+    >
       Home
     </router-link>
     <router-link
-      to="/products"
+      :to="{ name: 'Products' }"
       class="header__nav-item header__nav-item--products"
     >
       Products
     </router-link>
     <router-link
-      to="/contact-us"
+      :to="{ name: 'Contact' }"
       class="header__nav-item header__nav-item--contact"
     >
       Contact
@@ -18,12 +21,18 @@
   </ul>
 </template>
 
-<script lang="ts" setup>
-import { defineProps } from "vue";
+<script lang="ts">
+import { defineComponent } from "vue";
 
-const { isOpen } = defineProps<{
-  isOpen: boolean;
-}>();
+export default defineComponent({
+  name: "NavLinks",
+  props: {
+    isOpen: {
+      type: Boolean,
+      required: true,
+    },
+  },
+});
 </script>
 
 <style scoped lang="scss">

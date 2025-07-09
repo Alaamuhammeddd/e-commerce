@@ -2,7 +2,7 @@
   <div class="cart-panel" :class="{ 'cart-panel--open': isCartOpen }">
     <div class="cart-panel__header">
       <h3 class="cart-panel__title">Your Cart</h3>
-      <button class="cart-close" @click="$emit('close-cart')">✕</button>
+      <button class="cart-close" @click="emit('close-cart')">✕</button>
     </div>
 
     <div class="cart-panel__content">
@@ -26,6 +26,7 @@
         </div>
       </div>
     </div>
+
     <div class="cart-panel__footer">
       <p>Total: ${{ cartTotalPrice.toFixed(2) }}</p>
       <button class="cart-panel__footer--btn">Checkout</button>
@@ -33,22 +34,37 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { storeToRefs } from "pinia";
+<script lang="ts">
+import { defineComponent } from "vue";
 import { useCartStore } from "../Stores/modules/cart";
+import { storeToRefs } from "pinia";
 
-const { isCartOpen } = defineProps<{ isCartOpen: boolean }>();
+export default defineComponent({
+  name: "CartPanel",
+  props: {
+    isCartOpen: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  emits: ["close-cart"],
+  setup(_, { emit }) {
+    const cartStore = useCartStore();
+    const { cartItems } = storeToRefs(cartStore);
+    const cartTotalPrice = cartStore.cartTotalPrice;
 
-const emit = defineEmits(["close-cart"]);
+    function removeItem(id: number) {
+      cartStore.removeFromCart(id);
+    }
 
-const cartStore = useCartStore();
-
-const { cartItems } = storeToRefs(cartStore);
-const cartTotalPrice = cartStore.cartTotalPrice;
-
-function removeItem(id: number) {
-  cartStore.removeFromCart(id);
-}
+    return {
+      emit,
+      cartItems,
+      cartTotalPrice,
+      removeItem,
+    };
+  },
+});
 </script>
 
 <style scoped lang="scss">

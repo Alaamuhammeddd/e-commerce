@@ -1,9 +1,10 @@
 import type { RouteRecordRaw } from "vue-router";
 import { createRouter, createWebHistory } from "vue-router";
-import Products from "../components/Products.vue";
-import Home from "../components/Home.vue";
-import Contact from "../components/Contact.vue";
+import Products from "../views/Products.vue";
+import Home from "../views/Home.vue";
+import Contact from "../views/Contact.vue";
 import ViewProduct from "../components/ViewProduct.vue";
+import NotFound from "../views/NotFound.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/products",
@@ -24,6 +25,23 @@ const routes: Array<RouteRecordRaw> = [
     path: "/contact-us",
     name: "Contact",
     component: Contact,
+  },
+  {
+    path: "/contact",
+    redirect: "contact-us",
+  },
+  {
+    path: "/all-products",
+    redirect: "products",
+  },
+  {
+    path: "/",
+    redirect: "/home",
+  },
+  {
+    path: "/:catchAll(.*)",
+    name: "NotFound",
+    component: NotFound,
   },
 ];
 

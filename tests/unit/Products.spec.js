@@ -3,7 +3,6 @@ import { shallowMount, flushPromises } from "@vue/test-utils";
 import Products from "@/components/Products.vue";
 import { createTestingPinia } from "@pinia/testing";
 
-// Mocks
 vi.mock("@/Stores/modules/products", () => ({
   useProductStore: vi.fn(),
 }));
@@ -28,11 +27,11 @@ describe("Products.vue", () => {
     productStore = {
       fetchProducts: vi.fn(),
       allProducts: mockProducts,
-      isLoading: false, // ✅ Correct name
+      isLoading: false,
     };
 
     searchStore = {
-      searchQuery: "", // ✅ Used in component
+      searchQuery: "",
     };
 
     useProductStore.mockReturnValue(productStore);

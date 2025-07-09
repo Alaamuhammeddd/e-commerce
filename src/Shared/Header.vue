@@ -5,7 +5,7 @@
 
     <!-- Logo -->
     <div class="header__logo-wrapper">
-      <router-link to="/products">
+      <router-link :to="{ name: 'Home' }">
         <img class="header__logo" :src="logo" alt="logo" />
       </router-link>
     </div>
@@ -17,7 +17,7 @@
     <div class="header__icons">
       <SearchBar />
       <button class="header__btn header__btn--signup">Sign Up</button>
-      <button class="cart__btn--cart" @click="toggleCart">
+      <button class="cart__btn--cart" @click="toggleCart" title="Cart Button">
         <i class="fa fa-shopping-cart" style="font-size: 26px"></i>
       </button>
       <Cart :is-cart-open="isCartOpen" @close-cart="toggleCart" />
@@ -53,13 +53,16 @@ function toggleMenu() {
   border: none;
   font-size: 16px;
   display: flex;
+  transition: 0.2s ease;
+  color: black;
   &:hover {
     cursor: pointer;
-    color: grey;
+    transition: 0.2s ease;
+    color: #333;
   }
 }
 .header {
-  background: linear-gradient(135deg, #f3a354, #d388a2, #d63792);
+  background: linear-gradient(to right, #7f5af0, #2cb67d);
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -81,30 +84,33 @@ function toggleMenu() {
     display: flex;
     align-items: center;
     gap: 25px;
-    color: 1e77d;
   }
 
   &__btn {
     background: none;
     border: none;
     font-size: 16px;
-    color: #1e077d;
+    color: white;
 
     &--search {
       display: flex;
       gap: 10px;
+      color: black;
     }
 
     &--signup {
-      border: 2px solid #1e077d;
-      border-radius: 3px;
+      border-radius: 5px;
       padding: 0.3rem 0.6rem;
+      background-color: black;
+      color: white;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
 
       &:hover {
-        color: white;
+        background-color: transparent;
+        color: black;
+        border: 2px solid black;
         cursor: pointer;
-        background-color: #1e077d;
-        transition: 0.3s ease;
       }
     }
   }

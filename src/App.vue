@@ -5,9 +5,11 @@ import "./assets/base.css";
 </script>
 
 <template>
-  <Header></Header>
-  <router-view />
-  <Footer></Footer>
+  <div class="root">
+    <Header></Header>
+    <router-view />
+    <Footer></Footer>
+  </div>
 </template>
 
 <style scoped>

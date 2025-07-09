@@ -1,21 +1,31 @@
-<script setup lang="ts">
-import { defineProps, defineEmits } from "vue";
+<script lang="ts">
+import { defineComponent } from "vue";
 
-const props = defineProps<{
-  isOpen: boolean;
-}>();
+export default defineComponent({
+  name: "MobileMenu",
+  props: {
+    isOpen: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  emits: ["close-menu"],
+  setup(props, { emit }) {
+    const closeMenu = () => {
+      emit("close-menu");
+    };
 
-const emit = defineEmits<{
-  (e: "close-menu"): void;
-}>();
+    return {
+      isOpen: props.isOpen,
+      closeMenu,
+    };
+  },
+});
 </script>
 
 <template>
-  <div
-    class="mobile-menu"
-    :class="{ 'mobile-menu__hamburger--open': props.isOpen }"
-  >
-    <div class="mobile-menu__hamburger" @click="emit('close-menu')">
+  <div class="mobile-menu" :class="{ 'mobile-menu__hamburger--open': isOpen }">
+    <div class="mobile-menu__hamburger" @click="closeMenu">
       <i class="fa fa-bars" style="font-size: 21px"></i>
     </div>
   </div>

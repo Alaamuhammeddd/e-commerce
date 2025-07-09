@@ -4,32 +4,45 @@
       v-model="localSelected"
       @change="emit('update:modelValue', localSelected)"
     >
-      <option value="default">Default</option>
-      <option value="lowToHigh">Price: Low to High</option>
-      <option value="highToLow">Price: High to Low</option>
+      <option value="default" title="default">Default</option>
+      <option value="lowToHigh" title="Price: Low to High">
+        Price: Low to High
+      </option>
+      <option value="highToLow" title="Price: High to Low">
+        Price: High to Low
+      </option>
     </select>
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, watch } from "vue";
+<script lang="ts">
+import { defineComponent, ref, watch } from "vue";
 
-const props = defineProps<{
-  modelValue: string;
-}>();
+export default defineComponent({
+  name: "SortDropdown",
+  props: {
+    modelValue: {
+      type: String,
+      required: true,
+    },
+  },
+  emits: ["update:modelValue"],
+  setup(props, { emit }) {
+    const localSelected = ref(props.modelValue);
 
-const emit = defineEmits<{
-  (e: "update:modelValue", value: string): void;
-}>();
+    watch(
+      () => props.modelValue,
+      (val) => {
+        localSelected.value = val;
+      }
+    );
 
-const localSelected = ref(props.modelValue);
-
-watch(
-  () => props.modelValue,
-  (val) => {
-    localSelected.value = val;
-  }
-);
+    return {
+      localSelected,
+      emit,
+    };
+  },
+});
 </script>
 
 <style scoped lang="scss">
