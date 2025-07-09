@@ -13,16 +13,19 @@
         :key="item.id"
         class="cart-panel__item"
       >
+        <img
+          :src="item.image"
+          alt="product image"
+          class="cart-panel__item-image"
+        />
         <div class="cart-panel__item-info">
-          <div class="cart-panel__item-header">
-            <p>
-              <strong>{{ item.title }}</strong>
-            </p>
-            <p>${{ item.price.toFixed(2) }}</p>
+          <div class="cart-panel__item-top">
+            <strong class="cart-panel__item-title">{{ item.title }}</strong>
             <button class="remove-item-btn" @click="removeItem(item.id)">
               ✕ Remove
             </button>
           </div>
+          <p class="cart-panel__item-price">${{ item.price.toFixed(2) }}</p>
         </div>
       </div>
     </div>
@@ -35,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, computed } from "vue";
 import { useCartStore } from "../Stores/modules/cart";
 import { storeToRefs } from "pinia";
 
@@ -51,7 +54,9 @@ export default defineComponent({
   setup(_, { emit }) {
     const cartStore = useCartStore();
     const { cartItems } = storeToRefs(cartStore);
-    const cartTotalPrice = cartStore.cartTotalPrice;
+
+    // Make cartTotalPrice reactive
+    const cartTotalPrice = computed(() => cartStore.cartTotalPrice);
 
     function removeItem(id: number) {
       cartStore.removeFromCart(id);
@@ -68,61 +73,15 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-.remove-item-btn {
-  background-color: whitesmoke;
-  padding: 5px;
-  border-radius: 5px;
-  margin-block-start: 5px;
-  border: 2px solid #1e077d;
-  color: #c9302c;
-  &:hover {
-    background-color: #1e077d;
-    color: white;
-    transition: 0.2s ease;
-  }
-}
-.cart-holder {
-  display: flex;
-  font-size: 23px;
-}
-.cart-panel__footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 10px 10px;
-  &--btn {
-    border: 2px solid #1e077d;
-    padding: 5px;
-    border-radius: 5px;
-    &:hover {
-      color: whitesmoke;
-      background-color: #1e077d;
-      transition: 0.3s ease;
-    }
-  }
-}
-
-.cart__btn--cart {
-  background: none;
-  border: none;
-  font-size: 16px;
-  display: flex;
-
-  &:hover {
-    cursor: pointer;
-    color: grey;
-  }
-}
-
 .cart-panel {
   position: fixed;
   top: 0;
   right: 0;
   height: 100%;
-  width: 300px;
-  background-color: #414756;
-  color: #fff;
-  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  width: 340px;
+  background-color: #1e1e2f;
+  color: #ffffff;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
   transform: translateX(100%);
   transition: transform 0.3s ease-in-out;
   z-index: 999;
@@ -137,27 +96,126 @@ export default defineComponent({
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
-    border-bottom: 1px solid #ccc;
-    background-color: #414756;
-  }
+    padding: 1.2rem 1.5rem;
+    background-color: #2a2e3b;
+    border-bottom: 1px solid #444;
 
-  .cart-panel__title {
-    font-size: 1.2rem;
-  }
+    .cart-panel__title {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
 
-  .cart-close {
-    background: none;
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-    color: white;
+    .cart-close {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: #ff6b6b;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: #ffffff;
+      }
+    }
   }
 
   .cart-panel__content {
-    padding: 1rem;
+    padding: 1rem 1.5rem;
     flex-grow: 1;
     overflow-y: auto;
+  }
+
+  .cart-panel__item {
+    display: flex;
+    gap: 12px;
+    background-color: #2a2e3b;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #353a4a;
+    }
+
+    &-image {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    &-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    &-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      .cart-panel__item-title {
+        font-size: 0.95rem;
+        font-weight: bold;
+        margin: 0;
+        color: #ffffff;
+        max-width: 180px;
+        word-break: break-word;
+      }
+
+      .remove-item-btn {
+        background-color: transparent;
+        color: #ff6b6b;
+        border: none;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: color 0.2s ease;
+
+        &:hover {
+          color: white;
+        }
+      }
+    }
+
+    &-price {
+      font-size: 0.9rem;
+      color: #ccc;
+      margin-top: 4px;
+    }
+  }
+
+  .cart-panel__footer {
+    padding: 1rem 1.5rem;
+    background-color: #2a2e3b;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #444;
+
+    p {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    &--btn {
+      border: 2px solid #00d3a9;
+      background: transparent;
+      color: #00d3a9;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: #00d3a9;
+        color: #1e1e2f;
+      }
+    }
   }
 }
 </style>

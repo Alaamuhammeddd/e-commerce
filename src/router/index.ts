@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Products from "../views/Products.vue";
 import Home from "../views/Home.vue";
 import Contact from "../views/Contact.vue";
-import ViewProduct from "../components/ViewProduct.vue";
+import ViewProduct from "../views/ViewProduct.vue";
 import NotFound from "../views/NotFound.vue";
 const routes: Array<RouteRecordRaw> = [
   {

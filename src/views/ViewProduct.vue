@@ -56,6 +56,7 @@ import { defineComponent, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useSelectedProductStore } from "../Stores/modules/selectedProduct";
 import { useCartStore } from "../Stores/modules/cart";
+import { toast } from "vue3-toastify";
 
 export default defineComponent({
   name: "ProductView",
@@ -74,7 +75,7 @@ export default defineComponent({
           ...product.value,
           quantity: 1,
         });
-        alert("Added to cart");
+        toast.success("Added to cart!");
       }
     }
 
@@ -162,7 +163,7 @@ export default defineComponent({
   &__category {
     font-size: 0.85rem;
     text-transform: uppercase;
-    color: #666;
+    color: #1e077d;
     margin-bottom: 0.5rem;
   }
 
