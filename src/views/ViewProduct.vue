@@ -70,7 +70,9 @@ export default defineComponent({
         (item) => item.id === product.value?.id
       ).length;
 
-      return product.value ? product.value.rating.count - countInCart : 0;
+      return product.value
+        ? product.value.rating.count - countInCart
+        : "Out of stock";
     });
     function addToCart() {
       if (product.value) {
