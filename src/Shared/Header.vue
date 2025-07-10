@@ -1,49 +1,64 @@
 <template>
   <div class="header">
-    <!-- Mobile Menu -->
     <MobileMenu :is-open="isMenuOpen" @close-menu="toggleMenu" />
 
-    <!-- Logo -->
     <div class="header__logo-wrapper">
       <router-link :to="{ name: 'Home' }">
         <img class="header__logo" src="@/assets/Luna.png" alt="logo" />
       </router-link>
     </div>
 
-    <!-- Navigation -->
     <NavLinks :is-open="isMenuOpen" />
 
-    <!-- Action Buttons -->
     <div class="header__icons">
       <SearchBar />
       <button class="header__btn header__btn--signup">Sign Up</button>
-      <button class="cart__btn--cart" @click="toggleCart" title="Cart Button">
+      <button class="cart__btn--cart" @click="openCart" title="Cart Button">
         <i class="fa fa-shopping-cart" style="font-size: 26px"></i>
       </button>
-      <Cart :is-cart-open="isCartOpen" @close-cart="toggleCart" />
+      <Cart :is-cart-open="isCartOpen" @close-cart="closeCart" />
     </div>
   </div>
 </template>
-
-<script lang="ts" setup>
-import { ref } from "vue";
+<script lang="ts">
+import { defineComponent, ref } from "vue";
 import MobileMenu from "../components/MobileMenu.vue";
 import NavLinks from "../components/NavLinks.vue";
 import Cart from "../components/Cart.vue";
 import SearchBar from "../components/SearchBar.vue";
 
-// State
-const isCartOpen = ref(false);
-const isMenuOpen = ref(false);
+export default defineComponent({
+  name: "Header",
+  components: {
+    MobileMenu,
+    NavLinks,
+    Cart,
+    SearchBar,
+  },
+  setup() {
+    const isCartOpen = ref(false);
+    const isMenuOpen = ref(false);
 
-// Methods
-function toggleCart() {
-  isCartOpen.value = !isCartOpen.value;
-}
+    const openCart = () => {
+      isCartOpen.value = true;
+    };
+    const closeCart = () => {
+      isCartOpen.value = false;
+    };
 
-function toggleMenu() {
-  isMenuOpen.value = !isMenuOpen.value;
-}
+    const toggleMenu = () => {
+      isMenuOpen.value = !isMenuOpen.value;
+    };
+
+    return {
+      isCartOpen,
+      isMenuOpen,
+      openCart,
+      toggleMenu,
+      closeCart,
+    };
+  },
+});
 </script>
 
 <style scoped lang="scss">
@@ -121,23 +136,6 @@ function toggleMenu() {
     }
     flex-wrap: wrap;
     padding: 0.5rem;
-
-    &__hamburger {
-      display: flex;
-    }
-
-    &__nav {
-      display: none;
-
-      &--open {
-        gap: 10px;
-        display: flex;
-      }
-
-      &-item {
-        margin: 0.5rem 0;
-      }
-    }
 
     &__icons {
       gap: 20px;

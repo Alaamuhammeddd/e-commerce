@@ -4,17 +4,23 @@ import { setActivePinia, createPinia } from "pinia";
 import { useCartStore } from "@/Stores/modules/cart";
 import Cart from "@/components/Cart.vue";
 import { ref, computed } from "vue";
+import { toast } from "vue3-toastify";
 
 vi.mock("@/Stores/modules/cart", () => ({
   useCartStore: vi.fn(),
 }));
-
+vi.mock("vue3-toastify", () => ({
+  toast: {
+    error: vi.fn(),
+  },
+}));
 describe("Cart.vue", () => {
   let mockStore;
   let cartItemsRef;
 
   beforeEach(() => {
     // Activate Pinia
+    vi.clearAllMocks();
     setActivePinia(createPinia());
 
     // Setup mock store with reactive refs
@@ -22,9 +28,9 @@ describe("Cart.vue", () => {
 
     mockStore = {
       cartItems: cartItemsRef,
-      cartTotalPrice: computed(() =>
-        cartItemsRef.value.reduce((acc, item) => acc + item.price, 0)
-      ),
+      get cartTotalPrice() {
+        return cartItemsRef.value.reduce((acc, item) => acc + item.price, 0);
+      },
       removeFromCart: vi.fn(),
     };
 
@@ -68,5 +74,6 @@ describe("Cart.vue", () => {
 
     await wrapper.find(".remove-item-btn").trigger("click");
     expect(mockStore.removeFromCart).toHaveBeenCalledWith(2);
+    expect(toast.error).toHaveBeenCalledWith("Item removed from cart");
   });
 });

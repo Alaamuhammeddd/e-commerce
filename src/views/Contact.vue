@@ -122,18 +122,20 @@ const description = ref("");
       min-height: 100px;
       resize: vertical;
     }
-
     button {
       padding: 0.75rem;
       font-size: 1rem;
-      background-color: #1e077d;
+      background-color: black;
       color: white;
-      border: none;
+      border: 2px solid transparent; // prevent layout shift on hover
+      border-radius: 5px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: all 0.3s ease;
 
       &:hover {
-        background-color: #3c21b4;
+        background-color: transparent;
+        color: black;
+        border-color: black;
       }
     }
   }

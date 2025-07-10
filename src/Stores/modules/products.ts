@@ -1,13 +1,5 @@
-// src/Stores/modules/useProductStore.ts
 import { defineStore } from "pinia";
-import type { Product } from "../types";
-
-interface ProductState {
-  products: Product[];
-  loading: boolean;
-  error: string | null;
-}
-
+import type { ProductState } from "../types";
 export const useProductStore = defineStore("product", {
   state: (): ProductState => ({
     products: [],
@@ -18,7 +10,7 @@ export const useProductStore = defineStore("product", {
   getters: {
     allProducts: (state) => state.products,
     isLoading: (state) => state.loading,
-    hasError: (state) => !!state.error,
+    hasError: (state) => state.error,
   },
 
   actions: {

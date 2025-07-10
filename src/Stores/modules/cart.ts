@@ -11,25 +11,14 @@ export const useCartStore = defineStore("cart", {
   getters: {
     cartItems: (state) => state.items,
     cartTotalPrice: (state) =>
-      state.items.reduce(
-        (total, item) => total + item.price * item.quantity,
-        0
-      ),
+      state.items.reduce((total, item) => total + item.price, 0),
   },
 
   actions: {
     addToCart(product: CartItem) {
-      if (
-        typeof product.price !== "number" ||
-        typeof product.quantity !== "number"
-      ) {
-        throw new Error("Product must have a valid price and quantity");
-      }
-
       const existing = this.items.find((item) => item.id === product.id);
-      if (existing) {
-        existing.quantity += product.quantity;
-      } else {
+
+      if (!existing) {
         this.items.push({ ...product });
       }
 

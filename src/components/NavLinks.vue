@@ -37,47 +37,63 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .header__nav {
-  display: flex;
   list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
   gap: 130px;
   color: white;
+  position: static;
+  background: none;
+  flex-direction: row;
+}
 
-  &--open {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 2.5rem;
-    left: 1rem;
-    background-color: white;
-    padding: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    z-index: 10;
-  }
+.header__nav-item {
+  text-decoration: none;
+  transition: color 0.2s ease;
 
-  &-item {
-    text-decoration: none;
-    transition: color 0.2s ease;
-
-    &--home,
-    &--products,
-    &--contact {
-      &:hover {
-        color: #1e077d;
-        cursor: pointer;
-      }
+  &--home,
+  &--products,
+  &--contact {
+    &:hover {
+      color: #1e077d;
+      cursor: pointer;
     }
   }
 }
 
-// Mobile styles
+.header__nav--open {
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 1rem;
+  background-color: white;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  z-index: 10;
+
+  .header__nav-item {
+    margin: 0.5rem 0;
+  }
+}
+
 @media (max-width: 1023px) {
+  .header__nav {
+    display: none;
+  }
+
+  .header__nav--open {
+    display: flex !important;
+    color: black;
+    gap: 20px;
+  }
+
   .header__nav-item {
     color: black;
   }
 }
 
-// Desktop styles
 @media (min-width: 1024px) {
   .header__nav-item {
     color: white;

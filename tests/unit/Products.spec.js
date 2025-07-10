@@ -1,6 +1,8 @@
 // tests/unit/Products.spec.js
 import { shallowMount, flushPromises } from "@vue/test-utils";
-import Products from "@/components/Products.vue";
+import Products from "@/views/Products.vue";
+import { useProductStore } from "@/Stores/modules/products";
+import { useSearchStore } from "@/Stores/modules/search";
 import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("@/Stores/modules/products", () => ({
@@ -10,9 +12,6 @@ vi.mock("@/Stores/modules/products", () => ({
 vi.mock("@/Stores/modules/search", () => ({
   useSearchStore: vi.fn(),
 }));
-
-import { useProductStore } from "@/Stores/modules/products";
-import { useSearchStore } from "@/Stores/modules/search";
 
 describe("Products.vue", () => {
   let productStore;
@@ -68,6 +67,7 @@ describe("Products.vue", () => {
         stubs: {
           ProductCards: {
             template: "<div class='product-card'></div>",
+            props: ["product"],
           },
           "router-link": true,
           SortDropdown: true,
@@ -81,7 +81,8 @@ describe("Products.vue", () => {
   });
 
   it("filters products based on search query", async () => {
-    searchStore.searchQuery = "alpha"; // ✅ lowercase for match
+    searchStore.searchQuery = "alpha";
+
     const wrapper = shallowMount(Products, {
       global: {
         plugins: [createTestingPinia()],
@@ -103,10 +104,18 @@ describe("Products.vue", () => {
 
   it("displays 'No products found.' if filter is empty", async () => {
     searchStore.searchQuery = "zzz";
+
     const wrapper = shallowMount(Products, {
       global: {
         plugins: [createTestingPinia()],
-        stubs: ["router-link", "ProductCards", "SortDropdown"],
+        stubs: {
+          ProductCards: {
+            template: "<div class='product-card'></div>",
+            props: ["product"],
+          },
+          "router-link": true,
+          SortDropdown: true,
+        },
       },
     });
 

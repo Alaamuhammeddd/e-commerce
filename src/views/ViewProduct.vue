@@ -15,7 +15,7 @@
         <h2 class="product-view__title">{{ product.title }}</h2>
         <p class="product-view__description">{{ product.description }}</p>
         <p class="product-view__category">{{ product.category }}</p>
-        <p class="product-view__price">${{ product.price }}</p>
+        <p class="product-view__price">${{ product.price.toFixed(2) }}</p>
 
         <p class="product-view__rating">
           <span v-for="n in 5" :key="n">
@@ -64,18 +64,22 @@ export default defineComponent({
     const route = useRoute();
     const selectedProductStore = useSelectedProductStore();
     const cartStore = useCartStore();
-
     const product = computed(() => selectedProductStore.product);
     const isLoading = computed(() => selectedProductStore.isLoading);
     const error = computed(() => selectedProductStore.error);
 
     function addToCart() {
       if (product.value) {
-        cartStore.addToCart({
-          ...product.value,
-          quantity: 1,
-        });
-        toast.success("Added to cart!");
+        const alreadyInCart = cartStore.cartItems.some(
+          (item) => item.id === product.value!.id
+        );
+
+        if (alreadyInCart) {
+          toast.warning("Product already in cart!");
+        } else {
+          cartStore.addToCart({ ...product.value });
+          toast.success("Added to cart!");
+        }
       }
     }
 

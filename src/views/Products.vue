@@ -95,6 +95,7 @@ export default defineComponent({
   justify-content: flex-end;
 
   select {
+    border-radius: 20px;
     padding: 6px 10px;
     font-size: 14px;
     border-radius: 6px;

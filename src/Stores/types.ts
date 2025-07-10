@@ -9,7 +9,6 @@ export interface CartItem {
   image: string;
   title: string;
   price: number;
-  quantity: number;
 }
 export interface Product {
   id: number;
@@ -22,4 +21,10 @@ export interface Product {
     rate: number;
     count: number;
   };
+}
+
+export interface ProductState {
+  products: Product[];
+  loading: boolean;
+  error: string | null;
 }

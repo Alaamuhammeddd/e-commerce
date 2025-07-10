@@ -40,7 +40,15 @@ describe("Header.vue", () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = mount(Header);
+    wrapper = mount(Header, {
+      global: {
+        stubs: {
+          "router-link": {
+            template: "<a><slot /></a>",
+          },
+        },
+      },
+    });
   });
 
   it("renders logo image", () => {
@@ -49,17 +57,22 @@ describe("Header.vue", () => {
     expect(logo.attributes("alt")).toBe("logo");
   });
 
-  it("toggles cart open/close on button click", async () => {
+  it("opens cart on button click", async () => {
     const cartBtn = wrapper.find("button.cart__btn--cart");
-    expect(wrapper.html()).not.toContain("Cart is open");
-
     await cartBtn.trigger("click");
     expect(wrapper.vm.isCartOpen).toBe(true);
+  });
+  it("closes cart when Cart emits 'close-cart'", async () => {
+    wrapper.vm.isCartOpen = true;
 
-    await cartBtn.trigger("click");
+    await wrapper.vm.$nextTick();
+
+    const cartComponent = wrapper.findComponent({ name: "Cart" });
+
+    await cartComponent.vm.$emit("close-cart");
+
     expect(wrapper.vm.isCartOpen).toBe(false);
   });
-
   it("closes mobile menu when MobileMenu emits close-menu", async () => {
     wrapper.vm.isMenuOpen = true;
     await wrapper.findComponent({ name: "MobileMenu" }).vm.$emit("close-menu");

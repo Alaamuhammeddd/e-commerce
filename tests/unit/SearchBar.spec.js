@@ -57,26 +57,20 @@ describe("SearchBar.vue", () => {
     await nextTick();
 
     // Initially hidden
-    expect(
-      wrapper.find(".search-bar__mobileSearch").element.style.display
-    ).toBe("none");
+    expect(wrapper.find(".search-bar__overlay").exists()).toBe(false);
 
     // Click to show
     await wrapper.find(".fa-search").trigger("click");
     await nextTick();
 
     // Now visible
-    expect(
-      wrapper.find(".search-bar__mobileSearch").element.style.display
-    ).not.toBe("none");
+    expect(wrapper.find(".search-bar__overlay").exists()).toBe(true);
 
     // Click again to hide
     await wrapper.find(".fa-search").trigger("click");
     await nextTick();
 
     // Hidden again
-    expect(
-      wrapper.find(".search-bar__mobileSearch").element.style.display
-    ).toBe("none");
+    expect(wrapper.find(".search-bar__overlay").exists()).toBe(false);
   });
 });

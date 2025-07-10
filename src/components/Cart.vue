@@ -41,6 +41,7 @@
 import { defineComponent, computed } from "vue";
 import { useCartStore } from "../Stores/modules/cart";
 import { storeToRefs } from "pinia";
+import { toast } from "vue3-toastify";
 
 export default defineComponent({
   name: "CartPanel",
@@ -55,11 +56,11 @@ export default defineComponent({
     const cartStore = useCartStore();
     const { cartItems } = storeToRefs(cartStore);
 
-    // Make cartTotalPrice reactive
     const cartTotalPrice = computed(() => cartStore.cartTotalPrice);
 
     function removeItem(id: number) {
       cartStore.removeFromCart(id);
+      toast.error("Item removed from cart");
     }
 
     return {
