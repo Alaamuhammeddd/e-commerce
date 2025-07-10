@@ -7,6 +7,11 @@ import ViewProduct from "../views/ViewProduct.vue";
 import NotFound from "../views/NotFound.vue";
 const routes: Array<RouteRecordRaw> = [
   {
+    path: "/",
+    name: "Home",
+    component: Home,
+  },
+  {
     path: "/products",
     name: "Products",
     component: Products,
@@ -15,11 +20,6 @@ const routes: Array<RouteRecordRaw> = [
     path: "/products/:id",
     name: "ProductView",
     component: ViewProduct,
-  },
-  {
-    path: "/home",
-    name: "Home",
-    component: Home,
   },
   {
     path: "/contact-us",

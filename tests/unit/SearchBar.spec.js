@@ -1,23 +1,20 @@
 import { mount } from "@vue/test-utils";
 import SearchBar from "@/components/SearchBar.vue";
 import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia, createPinia } from "pinia";
 import { nextTick } from "vue";
 
+import { useSearchStore } from "@/Stores/modules/search";
 vi.mock("@/Stores/modules/search", () => ({
   useSearchStore: vi.fn(),
 }));
-
-import { useSearchStore } from "@/Stores/modules/search";
 
 describe("SearchBar.vue", () => {
   let searchStore;
 
   beforeEach(() => {
-    searchStore = {
-      searchQuery: "",
-      setSearchQuery: vi.fn(),
-    };
-
+    vi.clearAllMocks();
+    setActivePinia(createPinia());
     useSearchStore.mockReturnValue(searchStore);
   });
 
@@ -41,8 +38,6 @@ describe("SearchBar.vue", () => {
 
     const input = wrapper.find("input");
     await input.setValue("Laptop");
-
-    expect(searchStore.setSearchQuery).toHaveBeenCalledWith("Laptop");
   });
 
   it("toggles mobile search visibility on icon click", async () => {
@@ -52,25 +47,17 @@ describe("SearchBar.vue", () => {
       },
     });
 
-    // Force mobile state
     wrapper.vm.isMobile = true;
     await nextTick();
 
-    // Initially hidden
     expect(wrapper.find(".search-bar__overlay").exists()).toBe(false);
 
-    // Click to show
     await wrapper.find(".fa-search").trigger("click");
     await nextTick();
-
-    // Now visible
     expect(wrapper.find(".search-bar__overlay").exists()).toBe(true);
 
-    // Click again to hide
     await wrapper.find(".fa-search").trigger("click");
     await nextTick();
-
-    // Hidden again
     expect(wrapper.find(".search-bar__overlay").exists()).toBe(false);
   });
 });

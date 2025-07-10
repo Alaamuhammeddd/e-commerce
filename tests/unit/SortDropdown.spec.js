@@ -38,5 +38,9 @@ describe("SortDropdown.vue", () => {
     await wrapper.setProps({ modelValue: "highToLow" });
     const select = wrapper.find("select");
     expect(select.element.value).toBe("highToLow");
+
+    await wrapper.setProps({ modelValue: "lowToHigh" });
+
+    expect(select.element.value).toBe("lowToHigh");
   });
 });

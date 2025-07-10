@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { mount } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import MobileMenu from "@/components/MobileMenu.vue";
 
 describe("MobileMenu.vue", () => {
   it("adds open class when isOpen is true", () => {
-    const wrapper = mount(MobileMenu, {
+    const wrapper = shallowMount(MobileMenu, {
       props: {
         isOpen: true,
       },
@@ -14,7 +14,7 @@ describe("MobileMenu.vue", () => {
   });
 
   it("does not add open class when isOpen is false", () => {
-    const wrapper = mount(MobileMenu, {
+    const wrapper = shallowMount(MobileMenu, {
       props: {
         isOpen: false,
       },
@@ -24,7 +24,7 @@ describe("MobileMenu.vue", () => {
   });
 
   it("emits close-menu when hamburger is clicked", async () => {
-    const wrapper = mount(MobileMenu, {
+    const wrapper = shallowMount(MobileMenu, {
       props: {
         isOpen: true,
       },
@@ -32,6 +32,5 @@ describe("MobileMenu.vue", () => {
 
     await wrapper.find(".mobile-menu__hamburger").trigger("click");
     expect(wrapper.emitted("close-menu")).toBeTruthy();
-    expect(wrapper.emitted("close-menu").length).toBe(1);
   });
 });

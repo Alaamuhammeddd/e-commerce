@@ -10,13 +10,12 @@ export default defineComponent({
     },
   },
   emits: ["close-menu"],
-  setup(props, { emit }) {
+  setup(_, { emit }) {
     const closeMenu = () => {
       emit("close-menu");
     };
 
     return {
-      isOpen: props.isOpen,
       closeMenu,
     };
   },

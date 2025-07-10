@@ -31,14 +31,9 @@ export default defineComponent({
     SortDropdown,
   },
   setup() {
-    // Stores
     const productStore = useProductStore();
     const searchStore = useSearchStore();
-
-    // Local state
     const selectedSort = ref("default");
-
-    // Computed
     const products = computed<Product[]>(() => productStore.allProducts || []);
     const loading = computed(() => productStore.isLoading);
     const searchQuery = computed(

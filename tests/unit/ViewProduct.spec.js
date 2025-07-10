@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
 import ProductView from "@/views/ViewProduct.vue";
 import { toast } from "vue3-toastify";
+import { ref } from "vue";
 import { useCartStore } from "@/Stores/modules/cart"; //
 
 // Mocks
@@ -28,7 +29,7 @@ vi.mock("@/Stores/modules/cart", () => ({
 
 vi.mock("@/Stores/modules/selectedProduct", () => ({
   useSelectedProductStore: () => ({
-    product: {
+    product: ref({
       id: 1,
       title: "Test Product",
       description: "Test Description",
@@ -36,9 +37,9 @@ vi.mock("@/Stores/modules/selectedProduct", () => ({
       category: "electronics",
       image: "test.jpg",
       rating: { rate: 4.5, count: 20 },
-    },
-    isLoading: false,
-    error: null,
+    }),
+    isLoading: ref(false),
+    error: ref(null),
     fetchSelectedProduct: vi.fn(),
   }),
 }));
@@ -61,7 +62,6 @@ describe("ProductView.vue", () => {
   });
 
   it("adds product to cart if not already in cart", async () => {
-    // ✅ Update mocked return
     useCartStore.mockReturnValue({
       cartItems: [],
       addToCart: addToCartMock,

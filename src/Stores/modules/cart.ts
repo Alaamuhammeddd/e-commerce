@@ -5,29 +5,33 @@ const CART_KEY = "my-app-cart";
 
 export const useCartStore = defineStore("cart", {
   state: () => ({
-    items: JSON.parse(localStorage.getItem(CART_KEY) || "[]") as CartItem[],
+    CartItems: JSON.parse(localStorage.getItem(CART_KEY) || "[]") as CartItem[],
   }),
 
   getters: {
-    cartItems: (state) => state.items,
+    cartItems: (state) => state.CartItems,
     cartTotalPrice: (state) =>
-      state.items.reduce((total, item) => total + item.price, 0),
+      state.CartItems.reduce((total, CartItems) => total + CartItems.price, 0),
   },
 
   actions: {
     addToCart(product: CartItem) {
-      const existing = this.items.find((item) => item.id === product.id);
+      const existing = this.CartItems.find(
+        (CartItems) => CartItems.id === product.id
+      );
 
       if (!existing) {
-        this.items.push({ ...product });
+        this.CartItems.push({ ...product });
       }
 
-      localStorage.setItem(CART_KEY, JSON.stringify(this.items));
+      localStorage.setItem(CART_KEY, JSON.stringify(this.CartItems));
     },
 
     removeFromCart(id: number) {
-      this.items = this.items.filter((item) => item.id !== id);
-      localStorage.setItem(CART_KEY, JSON.stringify(this.items));
+      this.CartItems = this.CartItems.filter(
+        (CartItems) => CartItems.id !== id
+      );
+      localStorage.setItem(CART_KEY, JSON.stringify(this.CartItems));
     },
   },
 });

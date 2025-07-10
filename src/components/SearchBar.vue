@@ -26,22 +26,16 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  computed,
-  onMounted,
-  onBeforeUnmount,
-} from "vue";
+import { defineComponent, ref, onMounted, onBeforeUnmount } from "vue";
 import { useSearchStore } from "../Stores/modules/search";
-
+import { storeToRefs } from "pinia";
 export default defineComponent({
   name: "SearchBar",
   setup() {
     const isMobileSearchVisible = ref(false);
     const isMobile = ref(false);
-
     const searchStore = useSearchStore();
+    const { searchQuery } = storeToRefs(searchStore);
 
     const handleResize = () => {
       isMobile.value = window.innerWidth <= 1023;
@@ -57,13 +51,6 @@ export default defineComponent({
 
     onBeforeUnmount(() => {
       window.removeEventListener("resize", handleResize);
-    });
-
-    const searchQuery = computed({
-      get: () => searchStore.searchQuery,
-      set: (value: string) => {
-        searchStore.setSearchQuery(value);
-      },
     });
 
     const toggleMobileSearch = () => {

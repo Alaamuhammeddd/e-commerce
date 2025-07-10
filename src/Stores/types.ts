@@ -1,9 +1,7 @@
 export interface RootState {
   searchQuery: String;
 }
-export interface SelectedProductState {
-  selectedProduct: Product | null;
-}
+
 export interface CartItem {
   id: number;
   image: string;
@@ -25,6 +23,11 @@ export interface Product {
 
 export interface ProductState {
   products: Product[];
+  loading: boolean;
+  error: string | null;
+}
+export interface SelectedProductState {
+  selectedProduct: Product | null;
   loading: boolean;
   error: string | null;
 }

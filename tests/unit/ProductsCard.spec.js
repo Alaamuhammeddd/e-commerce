@@ -3,7 +3,6 @@ import { mount } from "@vue/test-utils";
 import ProductCard from "@/components/ProductCards.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
-// Dummy product data
 const mockProduct = {
   id: 1,
   title: "Test Product",
@@ -13,7 +12,6 @@ const mockProduct = {
   image: "https://example.com/image.jpg",
 };
 
-// Dummy router (required for RouterLink)
 const router = createRouter({
   history: createWebHistory(),
   routes: [{ path: "/product/:id", name: "ProductView", component: {} }],

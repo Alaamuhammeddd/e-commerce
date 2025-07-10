@@ -19,11 +19,9 @@ describe("Cart.vue", () => {
   let cartItemsRef;
 
   beforeEach(() => {
-    // Activate Pinia
     vi.clearAllMocks();
     setActivePinia(createPinia());
 
-    // Setup mock store with reactive refs
     cartItemsRef = ref([]);
 
     mockStore = {
@@ -46,12 +44,22 @@ describe("Cart.vue", () => {
   });
 
   it("displays cart items when present", () => {
-    cartItemsRef.value = [{ id: 1, title: "Product A", price: 10 }];
+    cartItemsRef.value = [
+      {
+        id: 1,
+        title: "Product A",
+        image: "https://example.com/product-a.jpg",
+        price: 10,
+      },
+    ];
 
     const wrapper = shallowMount(Cart, {
       props: { isCartOpen: true },
     });
-
+    const img = wrapper.find("img");
+    expect(img.exists()).toBe(true);
+    expect(img.attributes("src")).toBe("https://example.com/product-a.jpg");
+    expect(img.attributes("alt")).toBe("Product A");
     expect(wrapper.text()).toContain("Product A");
     expect(wrapper.text()).toContain("$10.00");
   });

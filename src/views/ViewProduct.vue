@@ -33,9 +33,8 @@
           ({{ product.rating.rate }})
         </p>
 
-        <p class="product-view__stock">
-          {{ product.rating.count }} left in stock
-        </p>
+        <p class="product-view__stock"></p>
+        <p class="product-view__stock">{{ availableStock }} left in stock</p>
 
         <div class="product-view__actions">
           <button class="product-view__add-to-cart" @click="addToCart">
@@ -57,17 +56,22 @@ import { useRoute } from "vue-router";
 import { useSelectedProductStore } from "../Stores/modules/selectedProduct";
 import { useCartStore } from "../Stores/modules/cart";
 import { toast } from "vue3-toastify";
+import { storeToRefs } from "pinia";
 
 export default defineComponent({
   name: "ProductView",
   setup() {
-    const route = useRoute();
     const selectedProductStore = useSelectedProductStore();
+    const { product, isLoading, error } = storeToRefs(selectedProductStore);
+    const route = useRoute();
     const cartStore = useCartStore();
-    const product = computed(() => selectedProductStore.product);
-    const isLoading = computed(() => selectedProductStore.isLoading);
-    const error = computed(() => selectedProductStore.error);
+    const availableStock = computed(() => {
+      const countInCart = cartStore.cartItems.filter(
+        (item) => item.id === product.value?.id
+      ).length;
 
+      return product.value ? product.value.rating.count - countInCart : 0;
+    });
     function addToCart() {
       if (product.value) {
         const alreadyInCart = cartStore.cartItems.some(
@@ -93,6 +97,7 @@ export default defineComponent({
       isLoading,
       error,
       addToCart,
+      availableStock,
     };
   },
 });

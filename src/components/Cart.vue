@@ -15,7 +15,7 @@
       >
         <img
           :src="item.image"
-          alt="product image"
+          :alt="item.title"
           class="cart-panel__item-image"
         />
         <div class="cart-panel__item-info">

@@ -1,12 +1,6 @@
 import { defineStore } from "pinia";
 import type { Product } from "../types";
-
-interface SelectedProductState {
-  selectedProduct: Product | null;
-  loading: boolean;
-  error: string | null;
-}
-
+import type { SelectedProductState } from "../types";
 export const useSelectedProductStore = defineStore("selectedProduct", {
   state: (): SelectedProductState => ({
     selectedProduct: null,

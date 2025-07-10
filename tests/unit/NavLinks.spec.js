@@ -4,11 +4,10 @@ import NavLinks from "@/components/NavLinks.vue";
 import { createTestingPinia } from "@pinia/testing";
 import { createRouter, createWebHistory } from "vue-router";
 
-// Minimal mock routes for <router-link>
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: "/home", name: "Home", component: { template: "<div>Home</div>" } },
+    { path: "/", name: "Home", component: { template: "<div>Home</div>" } },
     {
       path: "/products",
       name: "Products",
@@ -33,7 +32,6 @@ describe("NavLinks.vue", () => {
       },
     });
 
-    // Wait for router to be ready
     await router.isReady();
 
     expect(wrapper.findAll(".header__nav-item").length).toBe(3);
